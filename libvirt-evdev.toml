@@ -1,0 +1,37 @@
+[inputs]
+mouse = '/dev/input/by-id/usb-SteelSeries_SteelSeries_Rival_310_eSports_Mouse_000000000000-if01-event-mouse'
+keyboard = '/dev/input/by-id/usb-DATACOMP_SteelS쀁̄Љ̒DATA-event-kbd'
+
+[[screens]]
+name = 'Dell'
+dev = 'dev:/dev/i2c-1'
+address = '0x60'
+  [[screens.sources]]
+  id = '16'
+  owner = 'external'
+  name = 'mDP'
+  [[screens.sources]]
+  id = '17'
+  owner = 'guest'
+  name = 'HDMI1'
+  [[screens.sources]]
+  id = '18'
+  owner = 'host'
+  name = 'HDMI2'
+
+[[screens]]
+name = 'Philips'
+dev = 'dev:/dev/i2c-3'
+address = '0x60'
+  [[screens.sources]]
+  id = '1'
+  owner = 'external'
+  name = 'DSUB'
+  [[screens.sources]]
+  id = '3'
+  owner = 'host'
+  name = 'DVI'
+
+[usb_switch]
+property_value = '1a40/101/111'
+property_name = 'PRODUCT'
