@@ -12,12 +12,12 @@ import pyudev
 import toml
 import pickle
 
-def screen_input_switch(owner):
+async def screen_input_switch(owner):
     for screen in config['screens']:
         for source in screen['sources']:
             if source['owner'] == owner:
                 print("Screen input switch: {0} {1}".format(screen['name'], source['name']))
-                subprocess.run(["/usr/bin/ddccontrol", "-r", screen['address'], "-w", source['id'], screen['dev']], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                await asyncio.create_subprocess_exec("/usr/bin/ddccontrol", "-r", screen['address'], "-w", source['id'], screen['dev'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 async def replicate(source_device):
     global current_mode
@@ -34,7 +34,7 @@ async def replicate(source_device):
                         "guest": "host",
                     }[mode]
 
-                    screen_input_switch(current_mode)
+                    await screen_input_switch(current_mode)
 
                 mode = "host"
             else:
@@ -69,9 +69,9 @@ def action_usb(action, device):
 
     if device.get(config['usb_switch']['property_name']) == config['usb_switch']['property_value']:
         if action == 'add':
-            screen_input_switch(current_mode)
+            asyncio.run_coroutine_threadsafe(screen_input_switch(current_mode), loop)
         elif action == 'remove':
-            screen_input_switch("external")
+            asyncio.run_coroutine_threadsafe(screen_input_switch("external"), loop);
 
 
 if __name__ == '__main__':
